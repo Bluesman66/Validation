@@ -8,24 +8,38 @@ using Validation.Attributes;
 
 namespace Validation.Models
 {
-	[NotAllowedAttribute(ErrorMessage = "Недопустимая книга")]
-	public class Book
+	public class Book : IValidatableObject
 	{
 		[HiddenInput(DisplayValue = false)]
 		public int Id { get; set; }
 
-		[Required(ErrorMessage = "Поле должно быть установлено")]
 		[Display(Name = "Название")]
 		public string Name { get; set; }
 
-		[Required]
-		[MyAuthors(new string[] { "Л. Толстой", "А. Пушкин", "Ф. Достоевский", "И. Тургенев" }, ErrorMessage = "Недопустимый автор")]
 		[Display(Name = "Автор")]
 		public string Author { get; set; }
 
-		[Required]
 		[Display(Name = "Год")]
-		[Range(1700, 2000, ErrorMessage = "Недопустимый год")]
-		public int Year { get; set; }
+		public int? Year { get; set; }
+
+		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+		{
+			List<ValidationResult> errors = new List<ValidationResult>();
+
+			if (string.IsNullOrWhiteSpace(this.Name))
+			{
+				errors.Add(new ValidationResult("Введите название книги"));
+			}
+			if (string.IsNullOrWhiteSpace(this.Author))
+			{
+				errors.Add(new ValidationResult("Введите автора книги"));
+			}
+			if (this.Year == null || this.Year < 1700 || this.Year > 2000)
+			{
+				errors.Add(new ValidationResult("Недопустимый год"));
+			}
+
+			return errors;
+		}
 	}
 }
