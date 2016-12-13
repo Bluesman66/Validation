@@ -8,7 +8,7 @@ using Validation.Attributes;
 
 namespace Validation.Models
 {
-	public class Book : IValidatableObject
+	public class Book
 	{
 		[HiddenInput(DisplayValue = false)]
 		public int Id { get; set; }
@@ -21,25 +21,5 @@ namespace Validation.Models
 
 		[Display(Name = "Год")]
 		public int? Year { get; set; }
-
-		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-		{
-			List<ValidationResult> errors = new List<ValidationResult>();
-
-			if (string.IsNullOrWhiteSpace(this.Name))
-			{
-				errors.Add(new ValidationResult("Введите название книги"));
-			}
-			if (string.IsNullOrWhiteSpace(this.Author))
-			{
-				errors.Add(new ValidationResult("Введите автора книги"));
-			}
-			if (this.Year == null || this.Year < 1700 || this.Year > 2000)
-			{
-				errors.Add(new ValidationResult("Недопустимый год"));
-			}
-
-			return errors;
-		}
 	}
 }

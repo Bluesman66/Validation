@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Validation.Models;
+using Validation.Providers;
 
 namespace Validation
 {
@@ -14,6 +15,8 @@ namespace Validation
 	{
 		protected void Application_Start()
 		{
+			ModelValidatorProviders.Providers.Add(new MyValidationProvider());
+
 			Database.SetInitializer(new BookDbInitializer());
 
 			AreaRegistration.RegisterAllAreas();
